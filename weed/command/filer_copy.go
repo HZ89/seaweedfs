@@ -266,6 +266,16 @@ func (worker *FileCopyWorker) uploadFileAsOne(ctx context.Context, task FileCopy
 
 		targetUrl := "http://" + assignResult.Url + "/" + assignResult.Fid
 
+		if assignResult.PublicUrl != "" {
+			u, err := url.Parse(assignResult.PublicUrl + "/" + assignResult.Fid)
+			if err == nil {
+				if u.Scheme != "http" {
+					u.Scheme = "http"
+				}
+				targetUrl = u.String()
+			}
+		}
+
 		uploadResult, err := operation.Upload(targetUrl, fileName, f, false, mimeType, nil, assignResult.Auth)
 		if err != nil {
 			return fmt.Errorf("upload data %v to %s: %v\n", fileName, targetUrl, err)
@@ -339,6 +349,16 @@ func (worker *FileCopyWorker) uploadFileInChunks(ctx context.Context, task FileC
 		}
 
 		targetUrl := "http://" + assignResult.Url + "/" + assignResult.Fid
+
+		if assignResult.PublicUrl != "" {
+			u, err := url.Parse(assignResult.PublicUrl + "/" + assignResult.Fid)
+			if err == nil {
+				if u.Scheme != "http" {
+					u.Scheme = "http"
+				}
+				targetUrl = u.String()
+			}
+		}
 
 		uploadResult, err := operation.Upload(targetUrl,
 			fileName+"-"+strconv.FormatInt(i+1, 10),
