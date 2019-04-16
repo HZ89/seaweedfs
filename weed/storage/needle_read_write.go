@@ -8,6 +8,7 @@ import (
 	"os"
 
 	"github.com/HZ89/seaweedfs/weed/glog"
+	"github.com/HZ89/seaweedfs/weed/storage/types"
 	"github.com/HZ89/seaweedfs/weed/util"
 )
 
@@ -43,27 +44,27 @@ func (n *Needle) Append(w *os.File, version Version) (offset uint64, size uint32
 	}
 	switch version {
 	case Version1:
-		header := make([]byte, NeedleEntrySize)
-		CookieToBytes(header[0:CookieSize], n.Cookie)
-		NeedleIdToBytes(header[CookieSize:CookieSize+NeedleIdSize], n.Id)
+		header := make([]byte, types.NeedleEntrySize)
+		types.CookieToBytes(header[0:types.CookieSize], n.Cookie)
+		types.NeedleIdToBytes(header[types.CookieSize:types.CookieSize+types.NeedleIdSize], n.Id)
 		n.Size = uint32(len(n.Data))
 		size = n.Size
-		util.Uint32toBytes(header[CookieSize+NeedleIdSize:CookieSize+NeedleIdSize+SizeSize], n.Size)
+		util.Uint32toBytes(header[types.CookieSize+types.NeedleIdSize:types.CookieSize+types.NeedleIdSize+types.SizeSize], n.Size)
 		if _, err = w.Write(header); err != nil {
 			return
 		}
 		if _, err = w.Write(n.Data); err != nil {
 			return
 		}
-		actualSize = NeedleEntrySize + int64(n.Size)
+		actualSize = types.NeedleEntrySize + int64(n.Size)
 		padding := PaddingLength(n.Size, version)
 		util.Uint32toBytes(header[0:NeedleChecksumSize], n.Checksum.Value())
 		_, err = w.Write(header[0 : NeedleChecksumSize+padding])
 		return
 	case Version2, Version3:
-		header := make([]byte, NeedleEntrySize+TimestampSize) // adding timestamp to reuse it and avoid extra allocation
-		CookieToBytes(header[0:CookieSize], n.Cookie)
-		NeedleIdToBytes(header[CookieSize:CookieSize+NeedleIdSize], n.Id)
+		header := make([]byte, types.NeedleEntrySize+types.TimestampSize) // adding timestamp to reuse it and avoid extra allocation
+		types.CookieToBytes(header[0:types.CookieSize], n.Cookie)
+		types.NeedleIdToBytes(header[types.CookieSize:types.CookieSize+types.NeedleIdSize], n.Id)
 		if len(n.Name) >= math.MaxUint8 {
 			n.NameSize = math.MaxUint8
 		} else {
@@ -91,8 +92,8 @@ func (n *Needle) Append(w *os.File, version Version) (offset uint64, size uint32
 			n.Size = 0
 		}
 		size = n.DataSize
-		util.Uint32toBytes(header[CookieSize+NeedleIdSize:CookieSize+NeedleIdSize+SizeSize], n.Size)
-		if _, err = w.Write(header[0:NeedleEntrySize]); err != nil {
+		util.Uint32toBytes(header[types.CookieSize+types.NeedleIdSize:types.CookieSize+types.NeedleIdSize+types.SizeSize], n.Size)
+		if _, err = w.Write(header[0:types.NeedleEntrySize]); err != nil {
 			return
 		}
 		if n.DataSize > 0 {
@@ -153,8 +154,8 @@ func (n *Needle) Append(w *os.File, version Version) (offset uint64, size uint32
 			_, err = w.Write(header[0 : NeedleChecksumSize+padding])
 		} else {
 			// version3
-			util.Uint64toBytes(header[NeedleChecksumSize:NeedleChecksumSize+TimestampSize], n.AppendAtNs)
-			_, err = w.Write(header[0 : NeedleChecksumSize+TimestampSize+padding])
+			util.Uint64toBytes(header[NeedleChecksumSize:NeedleChecksumSize+types.TimestampSize], n.AppendAtNs)
+			_, err = w.Write(header[0 : NeedleChecksumSize+types.TimestampSize+padding])
 		}
 
 		return offset, n.DataSize, getActualSize(n.Size, version), err
@@ -179,30 +180,30 @@ func (n *Needle) ReadData(r *os.File, offset int64, size uint32, version Version
 	}
 	switch version {
 	case Version1:
-		n.Data = bytes[NeedleEntrySize : NeedleEntrySize+size]
+		n.Data = bytes[types.NeedleEntrySize : types.NeedleEntrySize+size]
 	case Version2, Version3:
-		err = n.readNeedleDataVersion2(bytes[NeedleEntrySize : NeedleEntrySize+int(n.Size)])
+		err = n.readNeedleDataVersion2(bytes[types.NeedleEntrySize : types.NeedleEntrySize+int(n.Size)])
 	}
 	if size == 0 || err != nil {
 		return err
 	}
-	checksum := util.BytesToUint32(bytes[NeedleEntrySize+size : NeedleEntrySize+size+NeedleChecksumSize])
+	checksum := util.BytesToUint32(bytes[types.NeedleEntrySize+size : types.NeedleEntrySize+size+NeedleChecksumSize])
 	newChecksum := NewCRC(n.Data)
 	if checksum != newChecksum.Value() {
 		return errors.New("CRC error! Data On Disk Corrupted")
 	}
 	n.Checksum = newChecksum
 	if version == Version3 {
-		tsOffset := NeedleEntrySize + size + NeedleChecksumSize
-		n.AppendAtNs = util.BytesToUint64(bytes[tsOffset : tsOffset+TimestampSize])
+		tsOffset := types.NeedleEntrySize + size + NeedleChecksumSize
+		n.AppendAtNs = util.BytesToUint64(bytes[tsOffset : tsOffset+types.TimestampSize])
 	}
 	return nil
 }
 
 func (n *Needle) ParseNeedleHeader(bytes []byte) {
-	n.Cookie = BytesToCookie(bytes[0:CookieSize])
-	n.Id = BytesToNeedleId(bytes[CookieSize : CookieSize+NeedleIdSize])
-	n.Size = util.BytesToUint32(bytes[CookieSize+NeedleIdSize : NeedleEntrySize])
+	n.Cookie = types.BytesToCookie(bytes[0:types.CookieSize])
+	n.Id = types.BytesToNeedleId(bytes[types.CookieSize : types.CookieSize+types.NeedleIdSize])
+	n.Size = util.BytesToUint32(bytes[types.CookieSize+types.NeedleIdSize : types.NeedleEntrySize])
 }
 
 func (n *Needle) readNeedleDataVersion2(bytes []byte) (err error) {
@@ -269,7 +270,7 @@ func (n *Needle) readNeedleDataVersion2(bytes []byte) (err error) {
 func ReadNeedleHeader(r *os.File, version Version, offset int64) (n *Needle, bodyLength int64, err error) {
 	n = new(Needle)
 	if version == Version1 || version == Version2 || version == Version3 {
-		bytes := make([]byte, NeedleEntrySize)
+		bytes := make([]byte, types.NeedleEntrySize)
 		var count int
 		count, err = r.ReadAt(bytes, offset)
 		if count <= 0 || err != nil {
@@ -284,14 +285,14 @@ func ReadNeedleHeader(r *os.File, version Version, offset int64) (n *Needle, bod
 func PaddingLength(needleSize uint32, version Version) uint32 {
 	if version == Version3 {
 		// this is same value as version2, but just listed here for clarity
-		return NeedlePaddingSize - ((NeedleEntrySize + needleSize + NeedleChecksumSize + TimestampSize) % NeedlePaddingSize)
+		return types.NeedlePaddingSize - ((types.NeedleEntrySize + needleSize + NeedleChecksumSize + types.TimestampSize) % types.NeedlePaddingSize)
 	}
-	return NeedlePaddingSize - ((NeedleEntrySize + needleSize + NeedleChecksumSize) % NeedlePaddingSize)
+	return types.NeedlePaddingSize - ((types.NeedleEntrySize + needleSize + NeedleChecksumSize) % types.NeedlePaddingSize)
 }
 
 func NeedleBodyLength(needleSize uint32, version Version) int64 {
 	if version == Version3 {
-		return int64(needleSize) + NeedleChecksumSize + TimestampSize + int64(PaddingLength(needleSize, version))
+		return int64(needleSize) + NeedleChecksumSize + types.TimestampSize + int64(PaddingLength(needleSize, version))
 	}
 	return int64(needleSize) + NeedleChecksumSize + int64(PaddingLength(needleSize, version))
 }
@@ -321,7 +322,7 @@ func (n *Needle) ReadNeedleBody(r *os.File, version Version, offset int64, bodyL
 
 		if version == Version3 {
 			tsOffset := n.Size + NeedleChecksumSize
-			n.AppendAtNs = util.BytesToUint64(bytes[tsOffset : tsOffset+TimestampSize])
+			n.AppendAtNs = util.BytesToUint64(bytes[tsOffset : tsOffset+types.TimestampSize])
 		}
 	default:
 		err = fmt.Errorf("Unsupported Version! (%d)", version)

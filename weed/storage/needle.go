@@ -10,6 +10,7 @@ import (
 	"time"
 
 	"github.com/HZ89/seaweedfs/weed/images"
+	"github.com/HZ89/seaweedfs/weed/storage/types"
 )
 
 const (
@@ -22,9 +23,9 @@ const (
 * Needle file size is limited to 4GB for now.
  */
 type Needle struct {
-	Cookie Cookie   `comment:"random number to mitigate brute force lookups"`
-	Id     NeedleId `comment:"needle id"`
-	Size   uint32   `comment:"sum of DataSize,Data,NameSize,Name,MimeSize,Mime"`
+	Cookie types.Cookie   `comment:"random number to mitigate brute force lookups"`
+	Id     types.NeedleId `comment:"needle id"`
+	Size   uint32         `comment:"sum of DataSize,Data,NameSize,Name,MimeSize,Mime"`
 
 	DataSize     uint32 `comment:"Data size"` //version2
 	Data         []byte `comment:"The actual file data"`
@@ -142,7 +143,7 @@ func CreateNeedleFromRequest(r *http.Request, fixJpgOrientation bool) (n *Needle
 }
 func (n *Needle) ParsePath(fid string) (err error) {
 	length := len(fid)
-	if length <= CookieSize*2 {
+	if length <= types.CookieSize*2 {
 		return fmt.Errorf("Invalid fid: %s", fid)
 	}
 	delta := ""
@@ -156,7 +157,7 @@ func (n *Needle) ParsePath(fid string) (err error) {
 	}
 	if delta != "" {
 		if d, e := strconv.ParseUint(delta, 10, 64); e == nil {
-			n.Id += NeedleId(d)
+			n.Id += types.NeedleId(d)
 		} else {
 			return e
 		}
@@ -164,21 +165,21 @@ func (n *Needle) ParsePath(fid string) (err error) {
 	return err
 }
 
-func ParseNeedleIdCookie(key_hash_string string) (NeedleId, Cookie, error) {
-	if len(key_hash_string) <= CookieSize*2 {
-		return NeedleIdEmpty, 0, fmt.Errorf("KeyHash is too short.")
+func ParseNeedleIdCookie(key_hash_string string) (types.NeedleId, types.Cookie, error) {
+	if len(key_hash_string) <= types.CookieSize*2 {
+		return types.NeedleIdEmpty, 0, fmt.Errorf("KeyHash is too short.")
 	}
-	if len(key_hash_string) > (NeedleIdSize+CookieSize)*2 {
-		return NeedleIdEmpty, 0, fmt.Errorf("KeyHash is too long.")
+	if len(key_hash_string) > (types.NeedleIdSize+types.CookieSize)*2 {
+		return types.NeedleIdEmpty, 0, fmt.Errorf("KeyHash is too long.")
 	}
-	split := len(key_hash_string) - CookieSize*2
-	needleId, err := ParseNeedleId(key_hash_string[:split])
+	split := len(key_hash_string) - types.CookieSize*2
+	needleId, err := types.ParseNeedleId(key_hash_string[:split])
 	if err != nil {
-		return NeedleIdEmpty, 0, fmt.Errorf("Parse needleId error: %v", err)
+		return types.NeedleIdEmpty, 0, fmt.Errorf("Parse needleId error: %v", err)
 	}
-	cookie, err := ParseCookie(key_hash_string[split:])
+	cookie, err := types.ParseCookie(key_hash_string[split:])
 	if err != nil {
-		return NeedleIdEmpty, 0, fmt.Errorf("Parse cookie error: %v", err)
+		return types.NeedleIdEmpty, 0, fmt.Errorf("Parse cookie error: %v", err)
 	}
 	return needleId, cookie, nil
 }

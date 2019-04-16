@@ -6,7 +6,7 @@ import (
 
 	"github.com/HZ89/seaweedfs/weed/glog"
 	"github.com/HZ89/seaweedfs/weed/storage/needle"
-	. "github.com/HZ89/seaweedfs/weed/storage/types"
+	"github.com/HZ89/seaweedfs/weed/storage/types"
 )
 
 type NeedleMap struct {
@@ -46,19 +46,19 @@ func LoadBtreeNeedleMap(file *os.File) (*NeedleMap, error) {
 }
 
 func doLoading(file *os.File, nm *NeedleMap) (*NeedleMap, error) {
-	e := WalkIndexFile(file, func(key NeedleId, offset Offset, size uint32) error {
+	e := WalkIndexFile(file, func(key types.NeedleId, offset types.Offset, size uint32) error {
 		nm.MaybeSetMaxFileKey(key)
-		if !offset.IsZero() && size != TombstoneFileSize {
+		if !offset.IsZero() && size != types.TombstoneFileSize {
 			nm.FileCounter++
 			nm.FileByteCounter = nm.FileByteCounter + uint64(size)
-			oldOffset, oldSize := nm.m.Set(NeedleId(key), offset, size)
+			oldOffset, oldSize := nm.m.Set(types.NeedleId(key), offset, size)
 			// glog.V(3).Infoln("reading key", key, "offset", offset*NeedlePaddingSize, "size", size, "oldSize", oldSize)
-			if !oldOffset.IsZero() && oldSize != TombstoneFileSize {
+			if !oldOffset.IsZero() && oldSize != types.TombstoneFileSize {
 				nm.DeletionCounter++
 				nm.DeletionByteCounter = nm.DeletionByteCounter + uint64(oldSize)
 			}
 		} else {
-			oldSize := nm.m.Delete(NeedleId(key))
+			oldSize := nm.m.Delete(types.NeedleId(key))
 			// glog.V(3).Infoln("removing key", key, "offset", offset*NeedlePaddingSize, "size", size, "oldSize", oldSize)
 			nm.DeletionCounter++
 			nm.DeletionByteCounter = nm.DeletionByteCounter + uint64(oldSize)
@@ -71,22 +71,22 @@ func doLoading(file *os.File, nm *NeedleMap) (*NeedleMap, error) {
 
 // walks through the index file, calls fn function with each key, offset, size
 // stops with the error returned by the fn function
-func WalkIndexFile(r *os.File, fn func(key NeedleId, offset Offset, size uint32) error) error {
+func WalkIndexFile(r *os.File, fn func(key types.NeedleId, offset types.Offset, size uint32) error) error {
 	var readerOffset int64
-	bytes := make([]byte, NeedleEntrySize*RowsToRead)
+	bytes := make([]byte, types.NeedleEntrySize*RowsToRead)
 	count, e := r.ReadAt(bytes, readerOffset)
 	glog.V(3).Infoln("file", r.Name(), "readerOffset", readerOffset, "count", count, "e", e)
 	readerOffset += int64(count)
 	var (
-		key    NeedleId
-		offset Offset
+		key    types.NeedleId
+		offset types.Offset
 		size   uint32
 		i      int
 	)
 
 	for count > 0 && e == nil || e == io.EOF {
-		for i = 0; i+NeedleEntrySize <= count; i += NeedleEntrySize {
-			key, offset, size = IdxFileEntry(bytes[i : i+NeedleEntrySize])
+		for i = 0; i+types.NeedleEntrySize <= count; i += types.NeedleEntrySize {
+			key, offset, size = IdxFileEntry(bytes[i : i+types.NeedleEntrySize])
 			if e = fn(key, offset, size); e != nil {
 				return e
 			}
@@ -101,19 +101,19 @@ func WalkIndexFile(r *os.File, fn func(key NeedleId, offset Offset, size uint32)
 	return e
 }
 
-func (nm *NeedleMap) Put(key NeedleId, offset Offset, size uint32) error {
-	_, oldSize := nm.m.Set(NeedleId(key), offset, size)
+func (nm *NeedleMap) Put(key types.NeedleId, offset types.Offset, size uint32) error {
+	_, oldSize := nm.m.Set(types.NeedleId(key), offset, size)
 	nm.logPut(key, oldSize, size)
 	return nm.appendToIndexFile(key, offset, size)
 }
-func (nm *NeedleMap) Get(key NeedleId) (element *needle.NeedleValue, ok bool) {
-	element, ok = nm.m.Get(NeedleId(key))
+func (nm *NeedleMap) Get(key types.NeedleId) (element *needle.NeedleValue, ok bool) {
+	element, ok = nm.m.Get(types.NeedleId(key))
 	return
 }
-func (nm *NeedleMap) Delete(key NeedleId, offset Offset) error {
-	deletedBytes := nm.m.Delete(NeedleId(key))
+func (nm *NeedleMap) Delete(key types.NeedleId, offset types.Offset) error {
+	deletedBytes := nm.m.Delete(types.NeedleId(key))
 	nm.logDelete(deletedBytes)
-	return nm.appendToIndexFile(key, offset, TombstoneFileSize)
+	return nm.appendToIndexFile(key, offset, types.TombstoneFileSize)
 }
 func (nm *NeedleMap) Close() {
 	_ = nm.indexFile.Close()

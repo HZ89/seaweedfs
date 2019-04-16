@@ -3,6 +3,8 @@ package needle
 import (
 	"sort"
 	"sync"
+
+	"github.com/HZ89/seaweedfs/weed/storage/types"
 )
 
 const (
@@ -15,12 +17,12 @@ const SectionalNeedleIdLimit = 1<<32 - 1
 
 type SectionalNeedleValue struct {
 	Key         SectionalNeedleId
-	OffsetLower OffsetLower `comment:"Volume offset"` //since aligned to 8 bytes, range is 4G*8=32G
-	Size        uint32      `comment:"Size of the data portion"`
+	OffsetLower types.OffsetLower `comment:"Volume offset"` //since aligned to 8 bytes, range is 4G*8=32G
+	Size        uint32            `comment:"Size of the data portion"`
 }
 
 type SectionalNeedleValueExtra struct {
-	OffsetHigher OffsetHigher
+	OffsetHigher types.OffsetHigher
 }
 
 type CompactSection struct {
@@ -29,15 +31,15 @@ type CompactSection struct {
 	valuesExtra   []SectionalNeedleValueExtra
 	overflow      Overflow
 	overflowExtra OverflowExtra
-	start         NeedleId
-	end           NeedleId
+	start         types.NeedleId
+	end           types.NeedleId
 	counter       int
 }
 
 type Overflow []SectionalNeedleValue
 type OverflowExtra []SectionalNeedleValueExtra
 
-func NewCompactSection(start NeedleId) *CompactSection {
+func NewCompactSection(start types.NeedleId) *CompactSection {
 	return &CompactSection{
 		values:        make([]SectionalNeedleValue, batch),
 		valuesExtra:   make([]SectionalNeedleValueExtra, batch),
@@ -48,7 +50,7 @@ func NewCompactSection(start NeedleId) *CompactSection {
 }
 
 //return old entry size
-func (cs *CompactSection) Set(key NeedleId, offset Offset, size uint32) (oldOffset Offset, oldSize uint32) {
+func (cs *CompactSection) Set(key types.NeedleId, offset types.Offset, size uint32) (oldOffset types.Offset, oldSize uint32) {
 	cs.Lock()
 	if key > cs.end {
 		cs.end = key
@@ -78,9 +80,9 @@ func (cs *CompactSection) Set(key NeedleId, offset Offset, size uint32) (oldOffs
 	return
 }
 
-func (cs *CompactSection) setOverflowEntry(skey SectionalNeedleId, offset Offset, size uint32) {
+func (cs *CompactSection) setOverflowEntry(skey SectionalNeedleId, offset types.Offset, size uint32) {
 	needleValue := SectionalNeedleValue{Key: skey, OffsetLower: offset.OffsetLower, Size: size}
-	needleValueExtra := SectionalNeedleValueExtra{OffsetHigher: OffsetHigher{}}
+	needleValueExtra := SectionalNeedleValueExtra{OffsetHigher: types.OffsetHigher{}}
 	insertCandidate := sort.Search(len(cs.overflow), func(i int) bool {
 		return cs.overflow[i].Key >= needleValue.Key
 	})
@@ -123,14 +125,14 @@ func (cs *CompactSection) deleteOverflowEntry(key SectionalNeedleId) {
 }
 
 //return old entry size
-func (cs *CompactSection) Delete(key NeedleId) uint32 {
+func (cs *CompactSection) Delete(key types.NeedleId) uint32 {
 	skey := SectionalNeedleId(key - cs.start)
 	cs.Lock()
 	ret := uint32(0)
 	if i := cs.binarySearchValues(skey); i >= 0 {
-		if cs.values[i].Size > 0 && cs.values[i].Size != TombstoneFileSize {
+		if cs.values[i].Size > 0 && cs.values[i].Size != types.TombstoneFileSize {
 			ret = cs.values[i].Size
-			cs.values[i].Size = TombstoneFileSize
+			cs.values[i].Size = types.TombstoneFileSize
 		}
 	}
 	if _, v, found := cs.findOverflowEntry(skey); found {
@@ -140,7 +142,7 @@ func (cs *CompactSection) Delete(key NeedleId) uint32 {
 	cs.Unlock()
 	return ret
 }
-func (cs *CompactSection) Get(key NeedleId) (*NeedleValue, bool) {
+func (cs *CompactSection) Get(key types.NeedleId) (*NeedleValue, bool) {
 	cs.RLock()
 	skey := SectionalNeedleId(key - cs.start)
 	if ve, v, ok := cs.findOverflowEntry(skey); ok {
@@ -179,7 +181,7 @@ func NewCompactMap() *CompactMap {
 	return &CompactMap{}
 }
 
-func (cm *CompactMap) Set(key NeedleId, offset Offset, size uint32) (oldOffset Offset, oldSize uint32) {
+func (cm *CompactMap) Set(key types.NeedleId, offset types.Offset, size uint32) (oldOffset types.Offset, oldSize uint32) {
 	x := cm.binarySearchCompactSection(key)
 	if x < 0 || (key-cm.list[x].start) > SectionalNeedleIdLimit {
 		// println(x, "adding to existing", len(cm.list), "sections, starting", key)
@@ -202,21 +204,21 @@ func (cm *CompactMap) Set(key NeedleId, offset Offset, size uint32) (oldOffset O
 	// println(key, "set to section[", x, "].start", cm.list[x].start)
 	return cm.list[x].Set(key, offset, size)
 }
-func (cm *CompactMap) Delete(key NeedleId) uint32 {
+func (cm *CompactMap) Delete(key types.NeedleId) uint32 {
 	x := cm.binarySearchCompactSection(key)
 	if x < 0 {
 		return uint32(0)
 	}
 	return cm.list[x].Delete(key)
 }
-func (cm *CompactMap) Get(key NeedleId) (*NeedleValue, bool) {
+func (cm *CompactMap) Get(key types.NeedleId) (*NeedleValue, bool) {
 	x := cm.binarySearchCompactSection(key)
 	if x < 0 {
 		return nil, false
 	}
 	return cm.list[x].Get(key)
 }
-func (cm *CompactMap) binarySearchCompactSection(key NeedleId) int {
+func (cm *CompactMap) binarySearchCompactSection(key types.NeedleId) int {
 	l, h := 0, len(cm.list)-1
 	if h < 0 {
 		return -5
@@ -269,11 +271,11 @@ func (cm *CompactMap) Visit(visit func(NeedleValue) error) error {
 }
 
 func toNeedleValue(snve SectionalNeedleValueExtra, snv SectionalNeedleValue, cs *CompactSection) NeedleValue {
-	offset := Offset{
+	offset := types.Offset{
 		OffsetHigher: snve.OffsetHigher,
 		OffsetLower:  snv.OffsetLower,
 	}
-	return NeedleValue{Key: NeedleId(snv.Key) + cs.start, Offset: offset, Size: snv.Size}
+	return NeedleValue{Key: types.NeedleId(snv.Key) + cs.start, Offset: offset, Size: snv.Size}
 }
 
 func (nv NeedleValue) toSectionalNeedleValue(cs *CompactSection) (SectionalNeedleValue, SectionalNeedleValueExtra) {
