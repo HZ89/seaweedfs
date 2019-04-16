@@ -9,6 +9,7 @@ import (
 
 	"github.com/HZ89/seaweedfs/weed/glog"
 	"github.com/HZ89/seaweedfs/weed/storage/needle"
+	"github.com/HZ89/seaweedfs/weed/storage/types"
 	"github.com/HZ89/seaweedfs/weed/util"
 	"github.com/syndtr/goleveldb/leveldb"
 )
@@ -64,8 +65,8 @@ func generateLevelDbFile(dbFileName string, indexFile *os.File) error {
 		return err
 	}
 	defer db.Close()
-	return WalkIndexFile(indexFile, func(key NeedleId, offset Offset, size uint32) error {
-		if !offset.IsZero() && size != TombstoneFileSize {
+	return WalkIndexFile(indexFile, func(key types.NeedleId, offset types.Offset, size uint32) error {
+		if !offset.IsZero() && size != types.TombstoneFileSize {
 			levelDbWrite(db, key, offset, size)
 		} else {
 			levelDbDelete(db, key)
@@ -74,19 +75,19 @@ func generateLevelDbFile(dbFileName string, indexFile *os.File) error {
 	})
 }
 
-func (m *LevelDbNeedleMap) Get(key NeedleId) (element *needle.NeedleValue, ok bool) {
-	bytes := make([]byte, NeedleIdSize)
-	NeedleIdToBytes(bytes[0:NeedleIdSize], key)
+func (m *LevelDbNeedleMap) Get(key types.NeedleId) (element *needle.NeedleValue, ok bool) {
+	bytes := make([]byte, types.NeedleIdSize)
+	types.NeedleIdToBytes(bytes[0:types.NeedleIdSize], key)
 	data, err := m.db.Get(bytes, nil)
-	if err != nil || len(data) != OffsetSize+SizeSize {
+	if err != nil || len(data) != types.OffsetSize+types.SizeSize {
 		return nil, false
 	}
-	offset := BytesToOffset(data[0:OffsetSize])
-	size := util.BytesToUint32(data[OffsetSize : OffsetSize+SizeSize])
-	return &needle.NeedleValue{Key: NeedleId(key), Offset: offset, Size: size}, true
+	offset := types.BytesToOffset(data[0:types.OffsetSize])
+	size := util.BytesToUint32(data[types.OffsetSize : types.OffsetSize+types.SizeSize])
+	return &needle.NeedleValue{Key: types.NeedleId(key), Offset: offset, Size: size}, true
 }
 
-func (m *LevelDbNeedleMap) Put(key NeedleId, offset Offset, size uint32) error {
+func (m *LevelDbNeedleMap) Put(key types.NeedleId, offset types.Offset, size uint32) error {
 	var oldSize uint32
 	if oldNeedle, ok := m.Get(key); ok {
 		oldSize = oldNeedle.Size
@@ -100,30 +101,30 @@ func (m *LevelDbNeedleMap) Put(key NeedleId, offset Offset, size uint32) error {
 }
 
 func levelDbWrite(db *leveldb.DB,
-	key NeedleId, offset Offset, size uint32) error {
+	key types.NeedleId, offset types.Offset, size uint32) error {
 
-	bytes := make([]byte, NeedleIdSize+OffsetSize+SizeSize)
-	NeedleIdToBytes(bytes[0:NeedleIdSize], key)
-	OffsetToBytes(bytes[NeedleIdSize:NeedleIdSize+OffsetSize], offset)
-	util.Uint32toBytes(bytes[NeedleIdSize+OffsetSize:NeedleIdSize+OffsetSize+SizeSize], size)
+	bytes := make([]byte, types.NeedleIdSize+types.OffsetSize+types.SizeSize)
+	types.NeedleIdToBytes(bytes[0:types.NeedleIdSize], key)
+	types.OffsetToBytes(bytes[types.NeedleIdSize:types.NeedleIdSize+types.OffsetSize], offset)
+	util.Uint32toBytes(bytes[types.NeedleIdSize+types.OffsetSize:types.NeedleIdSize+types.OffsetSize+types.SizeSize], size)
 
-	if err := db.Put(bytes[0:NeedleIdSize], bytes[NeedleIdSize:NeedleIdSize+OffsetSize+SizeSize], nil); err != nil {
+	if err := db.Put(bytes[0:types.NeedleIdSize], bytes[types.NeedleIdSize:types.NeedleIdSize+types.OffsetSize+types.SizeSize], nil); err != nil {
 		return fmt.Errorf("failed to write leveldb: %v", err)
 	}
 	return nil
 }
-func levelDbDelete(db *leveldb.DB, key NeedleId) error {
-	bytes := make([]byte, NeedleIdSize)
-	NeedleIdToBytes(bytes, key)
+func levelDbDelete(db *leveldb.DB, key types.NeedleId) error {
+	bytes := make([]byte, types.NeedleIdSize)
+	types.NeedleIdToBytes(bytes, key)
 	return db.Delete(bytes, nil)
 }
 
-func (m *LevelDbNeedleMap) Delete(key NeedleId, offset Offset) error {
+func (m *LevelDbNeedleMap) Delete(key types.NeedleId, offset types.Offset) error {
 	if oldNeedle, ok := m.Get(key); ok {
 		m.logDelete(oldNeedle.Size)
 	}
 	// write to index file first
-	if err := m.appendToIndexFile(key, offset, TombstoneFileSize); err != nil {
+	if err := m.appendToIndexFile(key, offset, types.TombstoneFileSize); err != nil {
 		return err
 	}
 	return levelDbDelete(m.db, key)

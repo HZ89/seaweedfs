@@ -2,12 +2,14 @@ package storage
 
 import (
 	"encoding/hex"
+
+	"github.com/HZ89/seaweedfs/weed/storage/types"
 )
 
 type FileId struct {
 	VolumeId VolumeId
-	Key      NeedleId
-	Cookie   Cookie
+	Key      types.NeedleId
+	Cookie   types.Cookie
 }
 
 func NewFileIdFromNeedle(VolumeId VolumeId, n *Needle) *FileId {
@@ -15,17 +17,17 @@ func NewFileIdFromNeedle(VolumeId VolumeId, n *Needle) *FileId {
 }
 
 func NewFileId(VolumeId VolumeId, key uint64, cookie uint32) *FileId {
-	return &FileId{VolumeId: VolumeId, Key: Uint64ToNeedleId(key), Cookie: Uint32ToCookie(cookie)}
+	return &FileId{VolumeId: VolumeId, Key: types.Uint64ToNeedleId(key), Cookie: types.Uint32ToCookie(cookie)}
 }
 
 func (n *FileId) String() string {
 	return n.VolumeId.String() + "," + formatNeedleIdCookie(n.Key, n.Cookie)
 }
 
-func formatNeedleIdCookie(key NeedleId, cookie Cookie) string {
-	bytes := make([]byte, NeedleIdSize+CookieSize)
-	NeedleIdToBytes(bytes[0:NeedleIdSize], key)
-	CookieToBytes(bytes[NeedleIdSize:NeedleIdSize+CookieSize], cookie)
+func formatNeedleIdCookie(key types.NeedleId, cookie types.Cookie) string {
+	bytes := make([]byte, types.NeedleIdSize+types.CookieSize)
+	types.NeedleIdToBytes(bytes[0:types.NeedleIdSize], key)
+	types.CookieToBytes(bytes[types.NeedleIdSize:types.NeedleIdSize+types.CookieSize], cookie)
 	nonzero_index := 0
 	for ; bytes[nonzero_index] == 0; nonzero_index++ {
 	}
