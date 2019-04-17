@@ -5,10 +5,10 @@ import (
 	"path/filepath"
 	"time"
 
-	"github.com/HZ89/seaweedfs/weed/pb/volume_server_pb"
-	ui "github.com/HZ89/seaweedfs/weed/server/volume_server_ui"
-	"github.com/HZ89/seaweedfs/weed/stats"
-	"github.com/HZ89/seaweedfs/weed/util"
+	"gitlab.momenta.works/kubetrain/seaweedfs/weed/pb/volume_server_pb"
+	ui "gitlab.momenta.works/kubetrain/seaweedfs/weed/server/volume_server_ui"
+	"gitlab.momenta.works/kubetrain/seaweedfs/weed/stats"
+	"gitlab.momenta.works/kubetrain/seaweedfs/weed/util"
 )
 
 func (vs *VolumeServer) uiStatusHandler(w http.ResponseWriter, r *http.Request) {

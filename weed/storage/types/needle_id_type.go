@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"strconv"
 
-	"github.com/HZ89/seaweedfs/weed/util"
+	"gitlab.momenta.works/kubetrain/seaweedfs/weed/util"
 )
 
 type NeedleId uint64

@@ -4,12 +4,12 @@ import (
 	"errors"
 	"math/rand"
 
-	"github.com/HZ89/seaweedfs/weed/glog"
-	"github.com/HZ89/seaweedfs/weed/pb/master_pb"
-	"github.com/HZ89/seaweedfs/weed/sequence"
-	"github.com/HZ89/seaweedfs/weed/storage"
-	"github.com/HZ89/seaweedfs/weed/util"
 	"github.com/chrislusf/raft"
+	"gitlab.momenta.works/kubetrain/seaweedfs/weed/glog"
+	"gitlab.momenta.works/kubetrain/seaweedfs/weed/pb/master_pb"
+	"gitlab.momenta.works/kubetrain/seaweedfs/weed/sequence"
+	"gitlab.momenta.works/kubetrain/seaweedfs/weed/storage"
+	"gitlab.momenta.works/kubetrain/seaweedfs/weed/util"
 )
 
 type Topology struct {

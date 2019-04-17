@@ -3,8 +3,8 @@ package filer2
 import (
 	"os"
 
-	"github.com/HZ89/seaweedfs/weed/glog"
 	"github.com/spf13/viper"
+	"gitlab.momenta.works/kubetrain/seaweedfs/weed/glog"
 )
 
 var (

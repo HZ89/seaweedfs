@@ -8,11 +8,11 @@ import (
 
 	"google.golang.org/grpc"
 
-	"github.com/HZ89/seaweedfs/weed/glog"
-	"github.com/HZ89/seaweedfs/weed/operation"
-	"github.com/HZ89/seaweedfs/weed/pb/filer_pb"
-	"github.com/HZ89/seaweedfs/weed/security"
-	"github.com/HZ89/seaweedfs/weed/util"
+	"gitlab.momenta.works/kubetrain/seaweedfs/weed/glog"
+	"gitlab.momenta.works/kubetrain/seaweedfs/weed/operation"
+	"gitlab.momenta.works/kubetrain/seaweedfs/weed/pb/filer_pb"
+	"gitlab.momenta.works/kubetrain/seaweedfs/weed/security"
+	"gitlab.momenta.works/kubetrain/seaweedfs/weed/util"
 )
 
 func (fs *FilerSink) replicateChunks(ctx context.Context, sourceChunks []*filer_pb.FileChunk) (replicatedChunks []*filer_pb.FileChunk, err error) {

@@ -8,12 +8,12 @@ import (
 	"sync"
 	"time"
 
-	"github.com/HZ89/seaweedfs/weed/glog"
-	"github.com/HZ89/seaweedfs/weed/pb/filer_pb"
-	"github.com/HZ89/seaweedfs/weed/util"
 	"github.com/karlseguin/ccache"
 	"github.com/seaweedfs/fuse"
 	"github.com/seaweedfs/fuse/fs"
+	"gitlab.momenta.works/kubetrain/seaweedfs/weed/glog"
+	"gitlab.momenta.works/kubetrain/seaweedfs/weed/pb/filer_pb"
+	"gitlab.momenta.works/kubetrain/seaweedfs/weed/util"
 	"google.golang.org/grpc"
 )
 

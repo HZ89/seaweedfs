@@ -5,7 +5,7 @@ import (
 	"log"
 	"testing"
 
-	"github.com/HZ89/seaweedfs/weed/pb/filer_pb"
+	"gitlab.momenta.works/kubetrain/seaweedfs/weed/pb/filer_pb"
 )
 
 func TestCompactFileChunks(t *testing.T) {

@@ -8,8 +8,8 @@ import (
 	"os"
 	"time"
 
-	"github.com/HZ89/seaweedfs/weed/glog"
-	. "github.com/HZ89/seaweedfs/weed/storage/types"
+	"gitlab.momenta.works/kubetrain/seaweedfs/weed/glog"
+	. "gitlab.momenta.works/kubetrain/seaweedfs/weed/storage/types"
 )
 
 var ErrorNotFound = errors.New("not found")

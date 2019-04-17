@@ -12,8 +12,8 @@ import (
 
 	"google.golang.org/grpc"
 
-	"github.com/HZ89/seaweedfs/weed/glog"
-	"github.com/HZ89/seaweedfs/weed/util"
+	"gitlab.momenta.works/kubetrain/seaweedfs/weed/glog"
+	"gitlab.momenta.works/kubetrain/seaweedfs/weed/util"
 )
 
 var (

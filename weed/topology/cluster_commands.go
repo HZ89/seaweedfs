@@ -1,9 +1,9 @@
 package topology
 
 import (
-	"github.com/HZ89/seaweedfs/weed/glog"
-	"github.com/HZ89/seaweedfs/weed/storage"
 	"github.com/chrislusf/raft"
+	"gitlab.momenta.works/kubetrain/seaweedfs/weed/glog"
+	"gitlab.momenta.works/kubetrain/seaweedfs/weed/storage"
 )
 
 type MaxVolumeIdCommand struct {

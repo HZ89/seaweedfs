@@ -5,7 +5,7 @@ package stats
 import (
 	"syscall"
 
-	"github.com/HZ89/seaweedfs/weed/pb/volume_server_pb"
+	"gitlab.momenta.works/kubetrain/seaweedfs/weed/pb/volume_server_pb"
 )
 
 func fillInDiskStatus(disk *volume_server_pb.DiskStatus) {

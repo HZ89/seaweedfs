@@ -6,9 +6,9 @@ import (
 	"io"
 	"os"
 
-	"github.com/HZ89/seaweedfs/weed/operation"
-	"github.com/HZ89/seaweedfs/weed/pb/volume_server_pb"
-	"github.com/HZ89/seaweedfs/weed/storage/types"
+	"gitlab.momenta.works/kubetrain/seaweedfs/weed/operation"
+	"gitlab.momenta.works/kubetrain/seaweedfs/weed/pb/volume_server_pb"
+	"gitlab.momenta.works/kubetrain/seaweedfs/weed/storage/types"
 	"google.golang.org/grpc"
 )
 

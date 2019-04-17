@@ -1,6 +1,6 @@
 package topology
 
-import "github.com/HZ89/seaweedfs/weed/pb/master_pb"
+import "gitlab.momenta.works/kubetrain/seaweedfs/weed/pb/master_pb"
 
 type DataCenter struct {
 	NodeImpl

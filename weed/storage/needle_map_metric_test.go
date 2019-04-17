@@ -5,7 +5,7 @@ import (
 	"math/rand"
 	"testing"
 
-	"github.com/HZ89/seaweedfs/weed/glog"
+	"gitlab.momenta.works/kubetrain/seaweedfs/weed/glog"
 )
 
 func TestFastLoadingNeedleMapMetrics(t *testing.T) {

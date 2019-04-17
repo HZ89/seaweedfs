@@ -7,7 +7,7 @@ import (
 
 	"github.com/spf13/viper"
 
-	"github.com/HZ89/seaweedfs/weed/glog"
+	"gitlab.momenta.works/kubetrain/seaweedfs/weed/glog"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials"
 )

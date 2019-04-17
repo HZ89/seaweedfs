@@ -3,8 +3,8 @@ package topology
 import (
 	"fmt"
 
-	"github.com/HZ89/seaweedfs/weed/storage"
-	"github.com/HZ89/seaweedfs/weed/util"
+	"gitlab.momenta.works/kubetrain/seaweedfs/weed/storage"
+	"gitlab.momenta.works/kubetrain/seaweedfs/weed/util"
 )
 
 type Collection struct {

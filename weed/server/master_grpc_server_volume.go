@@ -4,11 +4,11 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/HZ89/seaweedfs/weed/pb/master_pb"
-	"github.com/HZ89/seaweedfs/weed/security"
-	"github.com/HZ89/seaweedfs/weed/storage"
-	"github.com/HZ89/seaweedfs/weed/topology"
 	"github.com/chrislusf/raft"
+	"gitlab.momenta.works/kubetrain/seaweedfs/weed/pb/master_pb"
+	"gitlab.momenta.works/kubetrain/seaweedfs/weed/security"
+	"gitlab.momenta.works/kubetrain/seaweedfs/weed/storage"
+	"gitlab.momenta.works/kubetrain/seaweedfs/weed/topology"
 )
 
 func (ms *MasterServer) LookupVolume(ctx context.Context, req *master_pb.LookupVolumeRequest) (*master_pb.LookupVolumeResponse, error) {

@@ -14,13 +14,13 @@ import (
 	"sync"
 	"time"
 
-	"github.com/HZ89/seaweedfs/weed/operation"
-	"github.com/HZ89/seaweedfs/weed/pb/filer_pb"
-	"github.com/HZ89/seaweedfs/weed/security"
-	"github.com/HZ89/seaweedfs/weed/server"
-	"github.com/HZ89/seaweedfs/weed/util"
-	"github.com/HZ89/seaweedfs/weed/wdclient"
 	"github.com/spf13/viper"
+	"gitlab.momenta.works/kubetrain/seaweedfs/weed/operation"
+	"gitlab.momenta.works/kubetrain/seaweedfs/weed/pb/filer_pb"
+	"gitlab.momenta.works/kubetrain/seaweedfs/weed/security"
+	"gitlab.momenta.works/kubetrain/seaweedfs/weed/server"
+	"gitlab.momenta.works/kubetrain/seaweedfs/weed/util"
+	"gitlab.momenta.works/kubetrain/seaweedfs/weed/wdclient"
 	"google.golang.org/grpc"
 )
 

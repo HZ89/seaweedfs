@@ -8,7 +8,7 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/HZ89/seaweedfs/weed/pb/volume_server_pb"
+	"gitlab.momenta.works/kubetrain/seaweedfs/weed/pb/volume_server_pb"
 	"google.golang.org/grpc"
 )
 

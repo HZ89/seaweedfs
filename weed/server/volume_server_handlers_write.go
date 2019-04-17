@@ -8,10 +8,10 @@ import (
 	"strings"
 	"time"
 
-	"github.com/HZ89/seaweedfs/weed/glog"
-	"github.com/HZ89/seaweedfs/weed/operation"
-	"github.com/HZ89/seaweedfs/weed/storage"
-	"github.com/HZ89/seaweedfs/weed/topology"
+	"gitlab.momenta.works/kubetrain/seaweedfs/weed/glog"
+	"gitlab.momenta.works/kubetrain/seaweedfs/weed/operation"
+	"gitlab.momenta.works/kubetrain/seaweedfs/weed/storage"
+	"gitlab.momenta.works/kubetrain/seaweedfs/weed/topology"
 )
 
 func (vs *VolumeServer) PostHandler(w http.ResponseWriter, r *http.Request) {

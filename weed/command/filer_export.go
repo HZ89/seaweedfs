@@ -3,12 +3,12 @@ package command
 import (
 	"context"
 
-	"github.com/HZ89/seaweedfs/weed/filer2"
-	"github.com/HZ89/seaweedfs/weed/glog"
-	"github.com/HZ89/seaweedfs/weed/notification"
-	"github.com/HZ89/seaweedfs/weed/pb/filer_pb"
-	"github.com/HZ89/seaweedfs/weed/server"
 	"github.com/spf13/viper"
+	"gitlab.momenta.works/kubetrain/seaweedfs/weed/filer2"
+	"gitlab.momenta.works/kubetrain/seaweedfs/weed/glog"
+	"gitlab.momenta.works/kubetrain/seaweedfs/weed/notification"
+	"gitlab.momenta.works/kubetrain/seaweedfs/weed/pb/filer_pb"
+	"gitlab.momenta.works/kubetrain/seaweedfs/weed/server"
 )
 
 func init() {

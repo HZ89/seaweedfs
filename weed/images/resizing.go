@@ -8,8 +8,8 @@ import (
 	"image/png"
 	"io"
 
-	"github.com/HZ89/seaweedfs/weed/glog"
 	"github.com/disintegration/imaging"
+	"gitlab.momenta.works/kubetrain/seaweedfs/weed/glog"
 )
 
 func Resized(ext string, read io.ReadSeeker, width, height int, mode string) (resized io.ReadSeeker, w int, h int) {

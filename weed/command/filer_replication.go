@@ -4,17 +4,17 @@ import (
 	"context"
 	"strings"
 
-	"github.com/HZ89/seaweedfs/weed/glog"
-	"github.com/HZ89/seaweedfs/weed/replication"
-	"github.com/HZ89/seaweedfs/weed/replication/sink"
-	_ "github.com/HZ89/seaweedfs/weed/replication/sink/azuresink"
-	_ "github.com/HZ89/seaweedfs/weed/replication/sink/b2sink"
-	_ "github.com/HZ89/seaweedfs/weed/replication/sink/filersink"
-	_ "github.com/HZ89/seaweedfs/weed/replication/sink/gcssink"
-	_ "github.com/HZ89/seaweedfs/weed/replication/sink/s3sink"
-	"github.com/HZ89/seaweedfs/weed/replication/sub"
-	"github.com/HZ89/seaweedfs/weed/server"
 	"github.com/spf13/viper"
+	"gitlab.momenta.works/kubetrain/seaweedfs/weed/glog"
+	"gitlab.momenta.works/kubetrain/seaweedfs/weed/replication"
+	"gitlab.momenta.works/kubetrain/seaweedfs/weed/replication/sink"
+	_ "gitlab.momenta.works/kubetrain/seaweedfs/weed/replication/sink/azuresink"
+	_ "gitlab.momenta.works/kubetrain/seaweedfs/weed/replication/sink/b2sink"
+	_ "gitlab.momenta.works/kubetrain/seaweedfs/weed/replication/sink/filersink"
+	_ "gitlab.momenta.works/kubetrain/seaweedfs/weed/replication/sink/gcssink"
+	_ "gitlab.momenta.works/kubetrain/seaweedfs/weed/replication/sink/s3sink"
+	"gitlab.momenta.works/kubetrain/seaweedfs/weed/replication/sub"
+	"gitlab.momenta.works/kubetrain/seaweedfs/weed/server"
 )
 
 func init() {

@@ -15,15 +15,15 @@ import (
 	"sync"
 	"time"
 
-	"github.com/HZ89/seaweedfs/weed/server"
 	"github.com/spf13/viper"
+	"gitlab.momenta.works/kubetrain/seaweedfs/weed/server"
 	"google.golang.org/grpc"
 
-	"github.com/HZ89/seaweedfs/weed/glog"
-	"github.com/HZ89/seaweedfs/weed/operation"
-	"github.com/HZ89/seaweedfs/weed/security"
-	"github.com/HZ89/seaweedfs/weed/util"
-	"github.com/HZ89/seaweedfs/weed/wdclient"
+	"gitlab.momenta.works/kubetrain/seaweedfs/weed/glog"
+	"gitlab.momenta.works/kubetrain/seaweedfs/weed/operation"
+	"gitlab.momenta.works/kubetrain/seaweedfs/weed/security"
+	"gitlab.momenta.works/kubetrain/seaweedfs/weed/util"
+	"gitlab.momenta.works/kubetrain/seaweedfs/weed/wdclient"
 )
 
 type BenchmarkOptions struct {

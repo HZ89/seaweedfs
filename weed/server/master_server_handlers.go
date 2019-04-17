@@ -6,10 +6,10 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/HZ89/seaweedfs/weed/operation"
-	"github.com/HZ89/seaweedfs/weed/security"
-	"github.com/HZ89/seaweedfs/weed/stats"
-	"github.com/HZ89/seaweedfs/weed/storage"
+	"gitlab.momenta.works/kubetrain/seaweedfs/weed/operation"
+	"gitlab.momenta.works/kubetrain/seaweedfs/weed/security"
+	"gitlab.momenta.works/kubetrain/seaweedfs/weed/stats"
+	"gitlab.momenta.works/kubetrain/seaweedfs/weed/storage"
 )
 
 func (ms *MasterServer) lookupVolumeId(vids []string, collection string) (volumeLocations map[string]operation.LookupResult) {

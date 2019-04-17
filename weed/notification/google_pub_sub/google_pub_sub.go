@@ -6,10 +6,10 @@ import (
 	"os"
 
 	"cloud.google.com/go/pubsub"
-	"github.com/HZ89/seaweedfs/weed/glog"
-	"github.com/HZ89/seaweedfs/weed/notification"
-	"github.com/HZ89/seaweedfs/weed/util"
 	"github.com/golang/protobuf/proto"
+	"gitlab.momenta.works/kubetrain/seaweedfs/weed/glog"
+	"gitlab.momenta.works/kubetrain/seaweedfs/weed/notification"
+	"gitlab.momenta.works/kubetrain/seaweedfs/weed/util"
 	"google.golang.org/api/option"
 )
 

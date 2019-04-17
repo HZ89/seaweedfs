@@ -4,16 +4,16 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/HZ89/seaweedfs/weed/security"
 	"github.com/spf13/viper"
+	"gitlab.momenta.works/kubetrain/seaweedfs/weed/security"
 	"google.golang.org/grpc"
 
-	"github.com/HZ89/seaweedfs/weed/filer2"
-	"github.com/HZ89/seaweedfs/weed/glog"
-	"github.com/HZ89/seaweedfs/weed/pb/filer_pb"
-	"github.com/HZ89/seaweedfs/weed/replication/sink"
-	"github.com/HZ89/seaweedfs/weed/replication/source"
-	"github.com/HZ89/seaweedfs/weed/util"
+	"gitlab.momenta.works/kubetrain/seaweedfs/weed/filer2"
+	"gitlab.momenta.works/kubetrain/seaweedfs/weed/glog"
+	"gitlab.momenta.works/kubetrain/seaweedfs/weed/pb/filer_pb"
+	"gitlab.momenta.works/kubetrain/seaweedfs/weed/replication/sink"
+	"gitlab.momenta.works/kubetrain/seaweedfs/weed/replication/source"
+	"gitlab.momenta.works/kubetrain/seaweedfs/weed/util"
 )
 
 type FilerSink struct {

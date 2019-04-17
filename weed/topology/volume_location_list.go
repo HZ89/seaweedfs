@@ -3,7 +3,7 @@ package topology
 import (
 	"fmt"
 
-	"github.com/HZ89/seaweedfs/weed/storage"
+	"gitlab.momenta.works/kubetrain/seaweedfs/weed/storage"
 )
 
 type VolumeLocationList struct {

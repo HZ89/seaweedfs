@@ -9,12 +9,12 @@ import (
 	"sort"
 	"time"
 
-	"github.com/HZ89/seaweedfs/weed/util"
+	"gitlab.momenta.works/kubetrain/seaweedfs/weed/util"
 	"google.golang.org/grpc"
 
-	"github.com/HZ89/seaweedfs/weed/glog"
-	"github.com/HZ89/seaweedfs/weed/topology"
 	"github.com/chrislusf/raft"
+	"gitlab.momenta.works/kubetrain/seaweedfs/weed/glog"
+	"gitlab.momenta.works/kubetrain/seaweedfs/weed/topology"
 )
 
 type RaftServer struct {

@@ -1,11 +1,11 @@
 package kafka
 
 import (
-	"github.com/HZ89/seaweedfs/weed/glog"
-	"github.com/HZ89/seaweedfs/weed/notification"
-	"github.com/HZ89/seaweedfs/weed/util"
 	"github.com/Shopify/sarama"
 	"github.com/golang/protobuf/proto"
+	"gitlab.momenta.works/kubetrain/seaweedfs/weed/glog"
+	"gitlab.momenta.works/kubetrain/seaweedfs/weed/notification"
+	"gitlab.momenta.works/kubetrain/seaweedfs/weed/util"
 )
 
 func init() {

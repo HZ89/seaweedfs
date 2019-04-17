@@ -4,10 +4,10 @@ import (
 	"database/sql"
 	"fmt"
 
-	"github.com/HZ89/seaweedfs/weed/filer2"
-	"github.com/HZ89/seaweedfs/weed/filer2/abstract_sql"
-	"github.com/HZ89/seaweedfs/weed/util"
 	_ "github.com/lib/pq"
+	"gitlab.momenta.works/kubetrain/seaweedfs/weed/filer2"
+	"gitlab.momenta.works/kubetrain/seaweedfs/weed/filer2/abstract_sql"
+	"gitlab.momenta.works/kubetrain/seaweedfs/weed/util"
 )
 
 const (

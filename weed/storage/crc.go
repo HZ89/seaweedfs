@@ -4,8 +4,8 @@ import (
 	"crypto/md5"
 	"fmt"
 
-	"github.com/HZ89/seaweedfs/weed/util"
 	"github.com/klauspost/crc32"
+	"gitlab.momenta.works/kubetrain/seaweedfs/weed/util"
 )
 
 var table = crc32.MakeTable(crc32.Castagnoli)

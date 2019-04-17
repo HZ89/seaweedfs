@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/HZ89/seaweedfs/weed/sequence"
-	"github.com/HZ89/seaweedfs/weed/storage"
+	"gitlab.momenta.works/kubetrain/seaweedfs/weed/sequence"
+	"gitlab.momenta.works/kubetrain/seaweedfs/weed/storage"
 )
 
 var topologyLayout = `

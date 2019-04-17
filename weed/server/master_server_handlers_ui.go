@@ -3,10 +3,10 @@ package weed_server
 import (
 	"net/http"
 
-	ui "github.com/HZ89/seaweedfs/weed/server/master_ui"
-	"github.com/HZ89/seaweedfs/weed/stats"
-	"github.com/HZ89/seaweedfs/weed/util"
 	"github.com/chrislusf/raft"
+	ui "gitlab.momenta.works/kubetrain/seaweedfs/weed/server/master_ui"
+	"gitlab.momenta.works/kubetrain/seaweedfs/weed/stats"
+	"gitlab.momenta.works/kubetrain/seaweedfs/weed/util"
 )
 
 func (ms *MasterServer) uiStatusHandler(w http.ResponseWriter, r *http.Request) {

@@ -8,9 +8,9 @@ import (
 	"sync"
 	"time"
 
-	"github.com/HZ89/seaweedfs/weed/pb/master_pb"
+	"gitlab.momenta.works/kubetrain/seaweedfs/weed/pb/master_pb"
 
-	"github.com/HZ89/seaweedfs/weed/glog"
+	"gitlab.momenta.works/kubetrain/seaweedfs/weed/glog"
 )
 
 type Volume struct {

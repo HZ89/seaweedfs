@@ -3,7 +3,7 @@ package storage
 import (
 	"fmt"
 
-	"github.com/HZ89/seaweedfs/weed/glog"
+	"gitlab.momenta.works/kubetrain/seaweedfs/weed/glog"
 )
 
 func (s *Store) CheckCompactVolume(volumeId VolumeId) (float64, error) {

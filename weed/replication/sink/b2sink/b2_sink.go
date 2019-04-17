@@ -4,12 +4,12 @@ import (
 	"context"
 	"strings"
 
-	"github.com/HZ89/seaweedfs/weed/filer2"
-	"github.com/HZ89/seaweedfs/weed/pb/filer_pb"
-	"github.com/HZ89/seaweedfs/weed/replication/sink"
-	"github.com/HZ89/seaweedfs/weed/replication/source"
-	"github.com/HZ89/seaweedfs/weed/util"
 	"github.com/kurin/blazer/b2"
+	"gitlab.momenta.works/kubetrain/seaweedfs/weed/filer2"
+	"gitlab.momenta.works/kubetrain/seaweedfs/weed/pb/filer_pb"
+	"gitlab.momenta.works/kubetrain/seaweedfs/weed/replication/sink"
+	"gitlab.momenta.works/kubetrain/seaweedfs/weed/replication/source"
+	"gitlab.momenta.works/kubetrain/seaweedfs/weed/util"
 )
 
 type B2Sink struct {

@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"sort"
 
-	"github.com/HZ89/seaweedfs/weed/pb/master_pb"
+	"gitlab.momenta.works/kubetrain/seaweedfs/weed/pb/master_pb"
 )
 
 type VolumeInfo struct {

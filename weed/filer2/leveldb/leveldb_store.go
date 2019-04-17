@@ -5,11 +5,11 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/HZ89/seaweedfs/weed/filer2"
-	"github.com/HZ89/seaweedfs/weed/glog"
-	weed_util "github.com/HZ89/seaweedfs/weed/util"
 	"github.com/syndtr/goleveldb/leveldb"
 	leveldb_util "github.com/syndtr/goleveldb/leveldb/util"
+	"gitlab.momenta.works/kubetrain/seaweedfs/weed/filer2"
+	"gitlab.momenta.works/kubetrain/seaweedfs/weed/glog"
+	weed_util "gitlab.momenta.works/kubetrain/seaweedfs/weed/util"
 )
 
 const (

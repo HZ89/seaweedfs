@@ -4,10 +4,10 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/HZ89/seaweedfs/weed/operation"
-	"github.com/HZ89/seaweedfs/weed/pb/master_pb"
-	"github.com/HZ89/seaweedfs/weed/pb/volume_server_pb"
 	"github.com/chrislusf/raft"
+	"gitlab.momenta.works/kubetrain/seaweedfs/weed/operation"
+	"gitlab.momenta.works/kubetrain/seaweedfs/weed/pb/master_pb"
+	"gitlab.momenta.works/kubetrain/seaweedfs/weed/pb/volume_server_pb"
 )
 
 func (ms *MasterServer) CollectionList(ctx context.Context, req *master_pb.CollectionListRequest) (*master_pb.CollectionListResponse, error) {

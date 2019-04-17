@@ -18,10 +18,10 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/HZ89/seaweedfs/weed/glog"
-	"github.com/HZ89/seaweedfs/weed/notification"
-	"github.com/HZ89/seaweedfs/weed/util"
 	"github.com/golang/protobuf/proto"
+	"gitlab.momenta.works/kubetrain/seaweedfs/weed/glog"
+	"gitlab.momenta.works/kubetrain/seaweedfs/weed/notification"
+	"gitlab.momenta.works/kubetrain/seaweedfs/weed/util"
 	"gocloud.dev/pubsub"
 	_ "gocloud.dev/pubsub/awssnssqs"
 	_ "gocloud.dev/pubsub/azuresb"

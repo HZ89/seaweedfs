@@ -3,13 +3,13 @@ package s3api
 import (
 	"net/http"
 
-	_ "github.com/HZ89/seaweedfs/weed/filer2/cassandra"
-	_ "github.com/HZ89/seaweedfs/weed/filer2/leveldb"
-	_ "github.com/HZ89/seaweedfs/weed/filer2/memdb"
-	_ "github.com/HZ89/seaweedfs/weed/filer2/mysql"
-	_ "github.com/HZ89/seaweedfs/weed/filer2/postgres"
-	_ "github.com/HZ89/seaweedfs/weed/filer2/redis"
 	"github.com/gorilla/mux"
+	_ "gitlab.momenta.works/kubetrain/seaweedfs/weed/filer2/cassandra"
+	_ "gitlab.momenta.works/kubetrain/seaweedfs/weed/filer2/leveldb"
+	_ "gitlab.momenta.works/kubetrain/seaweedfs/weed/filer2/memdb"
+	_ "gitlab.momenta.works/kubetrain/seaweedfs/weed/filer2/mysql"
+	_ "gitlab.momenta.works/kubetrain/seaweedfs/weed/filer2/postgres"
+	_ "gitlab.momenta.works/kubetrain/seaweedfs/weed/filer2/redis"
 	"google.golang.org/grpc"
 )
 

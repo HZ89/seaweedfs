@@ -13,15 +13,15 @@ import (
 
 	"google.golang.org/grpc"
 
-	"github.com/HZ89/seaweedfs/weed/glog"
-	"github.com/HZ89/seaweedfs/weed/operation"
-	"github.com/HZ89/seaweedfs/weed/stats"
-	"github.com/HZ89/seaweedfs/weed/storage"
-	"github.com/HZ89/seaweedfs/weed/util"
+	"gitlab.momenta.works/kubetrain/seaweedfs/weed/glog"
+	"gitlab.momenta.works/kubetrain/seaweedfs/weed/operation"
+	"gitlab.momenta.works/kubetrain/seaweedfs/weed/stats"
+	"gitlab.momenta.works/kubetrain/seaweedfs/weed/storage"
+	"gitlab.momenta.works/kubetrain/seaweedfs/weed/util"
 
-	_ "github.com/HZ89/seaweedfs/weed/statik"
 	"github.com/gorilla/mux"
 	statik "github.com/rakyll/statik/fs"
+	_ "gitlab.momenta.works/kubetrain/seaweedfs/weed/statik"
 )
 
 var serverStats *stats.ServerStats

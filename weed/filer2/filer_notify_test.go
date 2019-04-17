@@ -4,8 +4,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/HZ89/seaweedfs/weed/pb/filer_pb"
 	"github.com/golang/protobuf/proto"
+	"gitlab.momenta.works/kubetrain/seaweedfs/weed/pb/filer_pb"
 )
 
 func TestProtoMarshalText(t *testing.T) {

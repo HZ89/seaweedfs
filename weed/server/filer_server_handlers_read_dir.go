@@ -6,9 +6,9 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/HZ89/seaweedfs/weed/filer2"
-	"github.com/HZ89/seaweedfs/weed/glog"
-	ui "github.com/HZ89/seaweedfs/weed/server/filer_ui"
+	"gitlab.momenta.works/kubetrain/seaweedfs/weed/filer2"
+	"gitlab.momenta.works/kubetrain/seaweedfs/weed/glog"
+	ui "gitlab.momenta.works/kubetrain/seaweedfs/weed/server/filer_ui"
 )
 
 // listDirectoryHandler lists directories and folers under a directory

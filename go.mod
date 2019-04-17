@@ -1,4 +1,4 @@
-module github.com/HZ89/seaweedfs
+module gitlab.momenta.works/kubetrain/seaweedfs
 
 go 1.12
 

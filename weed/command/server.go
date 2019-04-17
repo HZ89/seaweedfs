@@ -10,15 +10,15 @@ import (
 	"sync"
 	"time"
 
-	"github.com/HZ89/seaweedfs/weed/security"
 	"github.com/chrislusf/raft/protobuf"
 	"github.com/spf13/viper"
+	"gitlab.momenta.works/kubetrain/seaweedfs/weed/security"
 
-	"github.com/HZ89/seaweedfs/weed/glog"
-	"github.com/HZ89/seaweedfs/weed/pb/master_pb"
-	"github.com/HZ89/seaweedfs/weed/server"
-	"github.com/HZ89/seaweedfs/weed/util"
 	"github.com/gorilla/mux"
+	"gitlab.momenta.works/kubetrain/seaweedfs/weed/glog"
+	"gitlab.momenta.works/kubetrain/seaweedfs/weed/pb/master_pb"
+	"gitlab.momenta.works/kubetrain/seaweedfs/weed/server"
+	"gitlab.momenta.works/kubetrain/seaweedfs/weed/util"
 	"google.golang.org/grpc/reflection"
 )
 

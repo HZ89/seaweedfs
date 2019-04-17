@@ -3,7 +3,7 @@ package stats
 import (
 	"runtime"
 
-	"github.com/HZ89/seaweedfs/weed/pb/volume_server_pb"
+	"gitlab.momenta.works/kubetrain/seaweedfs/weed/pb/volume_server_pb"
 )
 
 func MemStat() *volume_server_pb.MemStatus {

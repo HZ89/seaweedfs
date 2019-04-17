@@ -6,7 +6,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/HZ89/seaweedfs/weed/glog"
+	"gitlab.momenta.works/kubetrain/seaweedfs/weed/glog"
 )
 
 var ErrorNotFound = errors.New("not found")

@@ -5,8 +5,8 @@ import (
 	"os"
 	"sync/atomic"
 
-	. "github.com/HZ89/seaweedfs/weed/storage/types"
 	"github.com/willf/bloom"
+	. "gitlab.momenta.works/kubetrain/seaweedfs/weed/storage/types"
 )
 
 type mapMetric struct {

@@ -4,7 +4,7 @@ import (
 	"net"
 	"time"
 
-	"github.com/HZ89/seaweedfs/weed/stats"
+	"gitlab.momenta.works/kubetrain/seaweedfs/weed/stats"
 )
 
 // Listener wraps a net.Listener, and gives a place to store the timeout

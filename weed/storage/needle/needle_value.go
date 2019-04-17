@@ -1,8 +1,8 @@
 package needle
 
 import (
-	. "github.com/HZ89/seaweedfs/weed/storage/types"
 	"github.com/google/btree"
+	. "gitlab.momenta.works/kubetrain/seaweedfs/weed/storage/types"
 )
 
 type NeedleValue struct {

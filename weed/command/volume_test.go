@@ -5,7 +5,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/HZ89/seaweedfs/weed/glog"
+	"gitlab.momenta.works/kubetrain/seaweedfs/weed/glog"
 )
 
 func TestXYZ(t *testing.T) {

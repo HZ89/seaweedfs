@@ -3,9 +3,9 @@ package sink
 import (
 	"context"
 
-	"github.com/HZ89/seaweedfs/weed/pb/filer_pb"
-	"github.com/HZ89/seaweedfs/weed/replication/source"
-	"github.com/HZ89/seaweedfs/weed/util"
+	"gitlab.momenta.works/kubetrain/seaweedfs/weed/pb/filer_pb"
+	"gitlab.momenta.works/kubetrain/seaweedfs/weed/replication/source"
+	"gitlab.momenta.works/kubetrain/seaweedfs/weed/util"
 )
 
 type ReplicationSink interface {

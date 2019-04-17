@@ -4,7 +4,7 @@ import (
 	"context"
 	"errors"
 
-	"github.com/HZ89/seaweedfs/weed/util"
+	"gitlab.momenta.works/kubetrain/seaweedfs/weed/util"
 )
 
 type FilerStore interface {

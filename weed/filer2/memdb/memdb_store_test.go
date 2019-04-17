@@ -4,7 +4,7 @@ import (
 	"context"
 	"testing"
 
-	"github.com/HZ89/seaweedfs/weed/filer2"
+	"gitlab.momenta.works/kubetrain/seaweedfs/weed/filer2"
 )
 
 func TestCreateAndFind(t *testing.T) {

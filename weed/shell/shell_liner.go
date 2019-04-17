@@ -10,7 +10,7 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/HZ89/seaweedfs/weed/wdclient"
+	"gitlab.momenta.works/kubetrain/seaweedfs/weed/wdclient"
 
 	"github.com/peterh/liner"
 )

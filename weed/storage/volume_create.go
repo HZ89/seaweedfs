@@ -5,7 +5,7 @@ package storage
 import (
 	"os"
 
-	"github.com/HZ89/seaweedfs/weed/glog"
+	"gitlab.momenta.works/kubetrain/seaweedfs/weed/glog"
 )
 
 func createVolumeFile(fileName string, preallocate int64) (file *os.File, e error) {

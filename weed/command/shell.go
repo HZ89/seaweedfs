@@ -1,10 +1,10 @@
 package command
 
 import (
-	"github.com/HZ89/seaweedfs/weed/security"
-	"github.com/HZ89/seaweedfs/weed/server"
-	"github.com/HZ89/seaweedfs/weed/shell"
 	"github.com/spf13/viper"
+	"gitlab.momenta.works/kubetrain/seaweedfs/weed/security"
+	"gitlab.momenta.works/kubetrain/seaweedfs/weed/server"
+	"gitlab.momenta.works/kubetrain/seaweedfs/weed/shell"
 )
 
 var (

@@ -7,8 +7,8 @@ import (
 	"sync"
 	"time"
 
-	"github.com/HZ89/seaweedfs/weed/glog"
-	"github.com/HZ89/seaweedfs/weed/storage"
+	"gitlab.momenta.works/kubetrain/seaweedfs/weed/glog"
+	"gitlab.momenta.works/kubetrain/seaweedfs/weed/storage"
 )
 
 // mapping from volume to its locations, inverted from server to volume

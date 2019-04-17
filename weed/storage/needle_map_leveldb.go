@@ -7,11 +7,11 @@ import (
 
 	"github.com/syndtr/goleveldb/leveldb/opt"
 
-	"github.com/HZ89/seaweedfs/weed/glog"
-	"github.com/HZ89/seaweedfs/weed/storage/needle"
-	"github.com/HZ89/seaweedfs/weed/storage/types"
-	"github.com/HZ89/seaweedfs/weed/util"
 	"github.com/syndtr/goleveldb/leveldb"
+	"gitlab.momenta.works/kubetrain/seaweedfs/weed/glog"
+	"gitlab.momenta.works/kubetrain/seaweedfs/weed/storage/needle"
+	"gitlab.momenta.works/kubetrain/seaweedfs/weed/storage/types"
+	"gitlab.momenta.works/kubetrain/seaweedfs/weed/util"
 )
 
 type LevelDbNeedleMap struct {
