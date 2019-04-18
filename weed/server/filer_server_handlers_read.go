@@ -11,6 +11,8 @@ import (
 	"path"
 	"strconv"
 	"strings"
+	"sync"
+	"sync/atomic"
 
 	"gitlab.momenta.works/kubetrain/seaweedfs/weed/filer2"
 	"gitlab.momenta.works/kubetrain/seaweedfs/weed/glog"
@@ -244,18 +246,45 @@ func (fs *FilerServer) writeContent(w io.Writer, entry *filer2.Entry, offset int
 		}
 		fileId2Url[chunkView.FileId] = urlString
 	}
-
+	buff := make([]byte, size)
+	var totalRead int64
+	var wg sync.WaitGroup
 	for _, chunkView := range chunkViews {
-		urlString := fileId2Url[chunkView.FileId]
-		_, err := util.ReadUrlAsStream(urlString, chunkView.Offset, int(chunkView.Size), func(data []byte) {
-			w.Write(data)
-		})
-		if err != nil {
-			glog.V(1).Infof("read %s failed, err: %v", chunkView.FileId, err)
-			return err
-		}
+		wg.Add(1)
+		go func(chunkView *filer2.ChunkView) {
+			defer wg.Done()
+			glog.V(4).Infof("read fh reading chunk: %+v", chunkView)
+			urlString, ok := fileId2Url[chunkView.FileId]
+			if !ok {
+				return
+			}
+			n, err := util.ReadUrl(urlString,
+				chunkView.Offset,
+				int(chunkView.Size),
+				buff[chunkView.LogicOffset-offset:chunkView.LogicOffset-offset+int64(chunkView.Size)],
+				!chunkView.IsFullChunk)
+			if err != nil {
+				glog.V(0).Infof("read %s failed: %v", urlString, err)
+				return
+			}
+			glog.V(4).Infof("read fh read %d bytes: %+v", n, chunkView)
+			atomic.AddInt64(&totalRead, n)
+		}(chunkView)
 	}
-
+	wg.Wait()
+	_, err := w.Write(buff[:totalRead])
+	if err != nil {
+		return err
+	}
+	//for _, chunkView := range chunkViews {
+	//	urlString := fileId2Url[chunkView.FileId]
+	//	_, err := util.ReadUrlAsStream(urlString, chunkView.Offset, int(chunkView.Size), func(data []byte) {
+	//		w.Write(data)
+	//	})
+	//	if err != nil {
+	//		glog.V(1).Infof("read %s failed, err: %v", chunkView.FileId, err)
+	//		return err
+	//	}
+	//}
 	return nil
-
 }
