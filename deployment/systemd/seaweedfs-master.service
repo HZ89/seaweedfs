@@ -1,0 +1,18 @@
+[Unit]
+Description=SeaweedFS Master Server
+Documentation=https://github.com/chrislusf/seaweedfs/wiki
+After=network-online.target firewalld.service
+Wants=network-online.target
+
+[Service]
+EnvironmentFile=/etc/seaweedfs/master
+ExecStart=/usr/local/bin/weed master -ip.bind ${BIND_IP} -mdir ${MDIR} \
+   -ip ${HOSTNAME} -volumePreallocate -peers ${PEERS} -port ${BIND_PORT} \
+   -volumeSizeLimitMB ${VOLUMESIZE} -defaultReplication ${REPLICATION}
+LimitNOFILE=infinity
+LimitNPROC=infinity
+LimitCORE=infinity
+Restart=on-failure
+RestartSec=7s
+[Install]
+WantedBy=multi-user.target

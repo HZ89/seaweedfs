@@ -1,0 +1,18 @@
+[Unit]
+Description=SeaweedFS Filer Server
+Documentation=https://github.com/chrislusf/seaweedfs/wiki
+After=network-online.target firewalld.service
+Wants=network-online.target
+
+[Service]
+EnvironmentFile=/etc/seaweedfs/filer
+ExecStart=/usr/local/bin/weed filer -port ${BIND_PORT} -ip ${BIND_IP} \
+  -master ${MASTERS} -redirectOnRead -defaultReplicaPlacement ${REPLICA} \
+  -disableDirListing -maxMB ${MAXCHUNK}
+LimitNOFILE=infinity
+LimitNPROC=infinity
+LimitCORE=infinity
+Restart=on-failure
+RestartSec=7s
+[Install]
+WantedBy=multi-user.target

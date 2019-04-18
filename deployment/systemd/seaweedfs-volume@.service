@@ -1,0 +1,17 @@
+[Unit]
+Description=SeaweedFS Volume Server
+Documentation=https://github.com/chrislusf/seaweedfs/wiki
+After=network-online.target firewalld.service
+Wants=network-online.target
+
+[Service]
+EnvironmentFile=/etc/seaweedfs/%I
+ExecStart=/usr/local/bin/weed volume -ip.bind ${BIND_IP} -mserver ${MASTERS} \
+  -port ${BIND_PORT} -dir ${DATA_DIR} -max ${VOLUME_COUNT} -ip ${HOSTNAME} \
+  -publicUrl ${PUBLIC_URL} -rack ${RACK} -dataCenter ${DC}
+LimitNOFILE=infinity
+LimitNPROC=infinity
+LimitCORE=infinity
+Restart=on-failure
+[Install]
+WantedBy=multi-user.target

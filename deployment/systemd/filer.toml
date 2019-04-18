@@ -1,0 +1,13 @@
+
+# A sample TOML config file for SeaweedFS filer store
+# Used with "weed filer" or "weed server -filer"
+# Put this file to one of the location, with descending priority
+#    ./filer.toml
+#    $HOME/.seaweedfs/filer.toml
+#    /etc/seaweedfs/filer.toml
+
+[redis]
+enabled = true
+address  = "localhost:6379"
+password = ""
+db = 0
