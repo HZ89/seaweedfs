@@ -8,7 +8,6 @@ import (
 
 	"gitlab.momenta.works/kubetrain/seaweedfs/weed/operation"
 	"gitlab.momenta.works/kubetrain/seaweedfs/weed/security"
-	"gitlab.momenta.works/kubetrain/seaweedfs/weed/stats"
 	"gitlab.momenta.works/kubetrain/seaweedfs/weed/storage"
 )
 
@@ -73,7 +72,7 @@ func (ms *MasterServer) dirLookupHandler(w http.ResponseWriter, r *http.Request)
 }
 
 func (ms *MasterServer) dirAssignHandler(w http.ResponseWriter, r *http.Request) {
-	stats.AssignRequest()
+	//stats.AssignRequest()
 	requestedCount, e := strconv.ParseUint(r.FormValue("count"), 10, 64)
 	if e != nil || requestedCount == 0 {
 		requestedCount = 1

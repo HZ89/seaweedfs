@@ -10,6 +10,7 @@ import (
 
 	"gitlab.momenta.works/kubetrain/seaweedfs/weed/glog"
 	"gitlab.momenta.works/kubetrain/seaweedfs/weed/operation"
+	"gitlab.momenta.works/kubetrain/seaweedfs/weed/server/metrics"
 	"gitlab.momenta.works/kubetrain/seaweedfs/weed/storage"
 	"gitlab.momenta.works/kubetrain/seaweedfs/weed/topology"
 )
@@ -54,6 +55,8 @@ func (vs *VolumeServer) PostHandler(w http.ResponseWriter, r *http.Request) {
 	ret.ETag = needle.Etag()
 	setEtag(w, ret.ETag)
 	writeJsonQuiet(w, r, httpStatus, ret)
+	metrics.FileSize.WithLabelValues(vs.dataCenter, vs.rack, r.FormValue("collection"), vs.store.Ip, fmt.Sprintf("%d", volumeId)).Add(float64(ret.Size) / float64(1073741824))
+	metrics.FileNumber.WithLabelValues(vs.dataCenter, vs.rack, r.FormValue("collection"), vs.store.Ip, fmt.Sprintf("%d", volumeId)).Add(1)
 }
 
 func (vs *VolumeServer) DeleteHandler(w http.ResponseWriter, r *http.Request) {
@@ -119,6 +122,8 @@ func (vs *VolumeServer) DeleteHandler(w http.ResponseWriter, r *http.Request) {
 		writeJsonError(w, r, http.StatusInternalServerError, fmt.Errorf("Deletion Failed: %v", err))
 	}
 
+	//metrics.FileSize.WithLabelValues(vs.dataCenter, vs.rack, "", vs.store.Ip).Add(ret.Size)
+	metrics.FileNumber.WithLabelValues(vs.dataCenter, vs.rack, r.FormValue("collection"), vs.store.Ip, fmt.Sprintf("%d", volumeId)).Dec()
 }
 
 func setEtag(w http.ResponseWriter, etag string) {

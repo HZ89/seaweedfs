@@ -11,8 +11,6 @@ import (
 	"strings"
 	"time"
 
-	"google.golang.org/grpc"
-
 	"gitlab.momenta.works/kubetrain/seaweedfs/weed/glog"
 	"gitlab.momenta.works/kubetrain/seaweedfs/weed/operation"
 	"gitlab.momenta.works/kubetrain/seaweedfs/weed/stats"
@@ -20,13 +18,16 @@ import (
 	"gitlab.momenta.works/kubetrain/seaweedfs/weed/util"
 
 	"github.com/gorilla/mux"
+	"github.com/prometheus/client_golang/prometheus"
 	statik "github.com/rakyll/statik/fs"
 	_ "gitlab.momenta.works/kubetrain/seaweedfs/weed/statik"
+	"google.golang.org/grpc"
 )
 
 var serverStats *stats.ServerStats
 var startTime = time.Now()
 var statikFS http.FileSystem
+var defaultMetricsHandler = prometheus.Handler().ServeHTTP
 
 func init() {
 	serverStats = stats.NewServerStats()
@@ -173,22 +174,9 @@ func parseURLPath(path string) (vid, fid, filename, ext string, isVolumeIdOnly b
 	return
 }
 
-func statsHealthHandler(w http.ResponseWriter, r *http.Request) {
+func healthzHandler(w http.ResponseWriter, r *http.Request) {
 	m := make(map[string]interface{})
 	m["Version"] = util.VERSION
-	writeJsonQuiet(w, r, http.StatusOK, m)
-}
-func statsCounterHandler(w http.ResponseWriter, r *http.Request) {
-	m := make(map[string]interface{})
-	m["Version"] = util.VERSION
-	m["Counters"] = serverStats
-	writeJsonQuiet(w, r, http.StatusOK, m)
-}
-
-func statsMemoryHandler(w http.ResponseWriter, r *http.Request) {
-	m := make(map[string]interface{})
-	m["Version"] = util.VERSION
-	m["Memory"] = stats.MemStat()
 	writeJsonQuiet(w, r, http.StatusOK, m)
 }
 

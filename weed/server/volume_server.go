@@ -3,12 +3,13 @@ package weed_server
 import (
 	"net/http"
 
-	"google.golang.org/grpc"
-
-	"github.com/spf13/viper"
 	"gitlab.momenta.works/kubetrain/seaweedfs/weed/glog"
 	"gitlab.momenta.works/kubetrain/seaweedfs/weed/security"
+	"gitlab.momenta.works/kubetrain/seaweedfs/weed/server/metrics"
 	"gitlab.momenta.works/kubetrain/seaweedfs/weed/storage"
+
+	"github.com/spf13/viper"
+	"google.golang.org/grpc"
 )
 
 type VolumeServer struct {
@@ -39,6 +40,7 @@ func NewVolumeServer(adminMux, publicMux *http.ServeMux, ip string,
 	v := viper.GetViper()
 	signingKey := v.GetString("jwt.signing.key")
 	enableUiAccess := v.GetBool("access.ui")
+	metrics.VolumeRegisterMetrics()
 
 	vs := &VolumeServer{
 		pulseSeconds:      pulseSeconds,
@@ -59,9 +61,7 @@ func NewVolumeServer(adminMux, publicMux *http.ServeMux, ip string,
 		// only expose the volume server details for safe environments
 		adminMux.HandleFunc("/ui/index.html", vs.uiStatusHandler)
 		adminMux.HandleFunc("/status", vs.guard.WhiteList(vs.statusHandler))
-		adminMux.HandleFunc("/stats/counter", vs.guard.WhiteList(statsCounterHandler))
-		adminMux.HandleFunc("/stats/memory", vs.guard.WhiteList(statsMemoryHandler))
-		adminMux.HandleFunc("/stats/disk", vs.guard.WhiteList(vs.statsDiskHandler))
+		adminMux.HandleFunc("/metrics", vs.guard.WhiteList(vs.metricsHandler))
 	}
 	adminMux.HandleFunc("/", vs.privateStoreHandler)
 	if publicMux != adminMux {
@@ -83,4 +83,13 @@ func (vs *VolumeServer) Shutdown() {
 
 func (vs *VolumeServer) jwt(fileId string) security.EncodedJwt {
 	return security.GenJwt(vs.guard.SigningKey, fileId)
+}
+
+func (vs *VolumeServer) metricsHandler(w http.ResponseWriter, r *http.Request) {
+	if r.Method == "DELETE" {
+		metrics.MasterReset()
+		writeJsonQuiet(w, r, http.StatusOK, "metrics reset")
+		return
+	}
+	defaultMetricsHandler(w, r)
 }

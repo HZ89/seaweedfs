@@ -11,15 +11,18 @@ import (
 	"gitlab.momenta.works/kubetrain/seaweedfs/weed/glog"
 	"gitlab.momenta.works/kubetrain/seaweedfs/weed/operation"
 	"gitlab.momenta.works/kubetrain/seaweedfs/weed/pb/volume_server_pb"
+	"gitlab.momenta.works/kubetrain/seaweedfs/weed/server/metrics"
 	"gitlab.momenta.works/kubetrain/seaweedfs/weed/storage"
 	"gitlab.momenta.works/kubetrain/seaweedfs/weed/topology"
 	"gitlab.momenta.works/kubetrain/seaweedfs/weed/util"
 )
 
 func (ms *MasterServer) collectionDeleteHandler(w http.ResponseWriter, r *http.Request) {
+	httpStatus := http.StatusOK
 	collection, ok := ms.Topo.FindCollection(r.FormValue("collection"))
 	if !ok {
-		writeJsonError(w, r, http.StatusBadRequest, fmt.Errorf("collection %s does not exist", r.FormValue("collection")))
+		httpStatus = http.StatusBadRequest
+		writeJsonError(w, r, httpStatus, fmt.Errorf("collection %s does not exist", r.FormValue("collection")))
 		return
 	}
 	for _, server := range collection.ListVolumeServers() {
@@ -30,7 +33,8 @@ func (ms *MasterServer) collectionDeleteHandler(w http.ResponseWriter, r *http.R
 			return deleteErr
 		})
 		if err != nil {
-			writeJsonError(w, r, http.StatusInternalServerError, err)
+			httpStatus = http.StatusInternalServerError
+			writeJsonError(w, r, httpStatus, err)
 			return
 		}
 	}
@@ -61,10 +65,12 @@ func (ms *MasterServer) volumeVacuumHandler(w http.ResponseWriter, r *http.Reque
 }
 
 func (ms *MasterServer) volumeGrowHandler(w http.ResponseWriter, r *http.Request) {
+	httpStatus := http.StatusOK
 	count := 0
 	option, err := ms.getVolumeGrowOption(r)
 	if err != nil {
-		writeJsonError(w, r, http.StatusNotAcceptable, err)
+		httpStatus = http.StatusNotAcceptable
+		writeJsonError(w, r, httpStatus, err)
 		return
 	}
 	if err == nil {
@@ -79,7 +85,8 @@ func (ms *MasterServer) volumeGrowHandler(w http.ResponseWriter, r *http.Request
 		}
 	}
 	if err != nil {
-		writeJsonError(w, r, http.StatusNotAcceptable, err)
+		httpStatus = http.StatusNotAcceptable
+		writeJsonError(w, r, httpStatus, err)
 	} else {
 		writeJsonQuiet(w, r, http.StatusOK, map[string]interface{}{"count": count})
 	}
@@ -120,6 +127,7 @@ func (ms *MasterServer) selfUrl(r *http.Request) string {
 	}
 	return "localhost:" + strconv.Itoa(ms.port)
 }
+
 func (ms *MasterServer) submitFromMasterServerHandler(w http.ResponseWriter, r *http.Request) {
 	if ms.Topo.IsLeader() {
 		submitForClientHandler(w, r, ms.selfUrl(r), ms.grpcDialOpiton)
@@ -168,4 +176,13 @@ func (ms *MasterServer) getVolumeGrowOption(r *http.Request) (*topology.VolumeGr
 		DataNode:         r.FormValue("dataNode"),
 	}
 	return volumeGrowOption, nil
+}
+
+func (ms *MasterServer) metricsHandler(w http.ResponseWriter, r *http.Request) {
+	if r.Method == "DELETE" {
+		metrics.MasterReset()
+		writeJsonQuiet(w, r, http.StatusOK, "metrics reset")
+		return
+	}
+	defaultMetricsHandler(w, r)
 }

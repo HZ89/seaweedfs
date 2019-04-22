@@ -4,12 +4,14 @@ import (
 	"errors"
 	"math/rand"
 
-	"github.com/chrislusf/raft"
 	"gitlab.momenta.works/kubetrain/seaweedfs/weed/glog"
 	"gitlab.momenta.works/kubetrain/seaweedfs/weed/pb/master_pb"
 	"gitlab.momenta.works/kubetrain/seaweedfs/weed/sequence"
+	"gitlab.momenta.works/kubetrain/seaweedfs/weed/server/metrics"
 	"gitlab.momenta.works/kubetrain/seaweedfs/weed/storage"
 	"gitlab.momenta.works/kubetrain/seaweedfs/weed/util"
+
+	"github.com/chrislusf/raft"
 )
 
 type Topology struct {
@@ -113,6 +115,7 @@ func (t *Topology) PickForWrite(count uint64, option *VolumeGrowOption) (string,
 
 func (t *Topology) GetVolumeLayout(collectionName string, rp *storage.ReplicaPlacement, ttl *storage.TTL) *VolumeLayout {
 	return t.collectionMap.Get(collectionName, func() interface{} {
+		defer metrics.CollectionNumber.WithLabelValues(string(t.Id())).Inc()
 		return NewCollection(collectionName, t.volumeSizeLimit)
 	}).(*Collection).GetOrCreateVolumeLayout(rp, ttl)
 }
@@ -134,6 +137,7 @@ func (t *Topology) FindCollection(collectionName string) (*Collection, bool) {
 
 func (t *Topology) DeleteCollection(collectionName string) {
 	t.collectionMap.Delete(collectionName)
+	metrics.CollectionNumber.WithLabelValues(string(t.Id())).Dec()
 }
 
 func (t *Topology) RegisterVolumeLayout(v storage.VolumeInfo, dn *DataNode) {
@@ -156,6 +160,7 @@ func (t *Topology) GetOrCreateDataCenter(dcName string) *DataCenter {
 		}
 	}
 	dc := NewDataCenter(dcName)
+	defer metrics.DataCenterNumber.WithLabelValues(string(t.Id())).Inc()
 	t.LinkChildNode(dc)
 	return dc
 }

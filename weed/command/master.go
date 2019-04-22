@@ -7,14 +7,16 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/chrislusf/raft/protobuf"
-	"github.com/gorilla/mux"
-	"github.com/spf13/viper"
 	"gitlab.momenta.works/kubetrain/seaweedfs/weed/glog"
 	"gitlab.momenta.works/kubetrain/seaweedfs/weed/pb/master_pb"
 	"gitlab.momenta.works/kubetrain/seaweedfs/weed/security"
 	"gitlab.momenta.works/kubetrain/seaweedfs/weed/server"
+	"gitlab.momenta.works/kubetrain/seaweedfs/weed/server/metrics"
 	"gitlab.momenta.works/kubetrain/seaweedfs/weed/util"
+
+	"github.com/chrislusf/raft/protobuf"
+	"github.com/gorilla/mux"
+	"github.com/spf13/viper"
 	"google.golang.org/grpc/reflection"
 )
 
@@ -75,6 +77,7 @@ func runMaster(cmd *Command, args []string) bool {
 		glog.Fatalf("volumeSizeLimitMB should be smaller than 30000")
 	}
 
+	metrics.MasterRegisterMetrics()
 	r := mux.NewRouter()
 	ms := weed_server.NewMasterServer(r, *mport, *metaFolder,
 		*volumeSizeLimitMB, *volumePreallocate,
