@@ -27,7 +27,9 @@ clean:
 	rm -rf build/
 
 deps:
-	go mod tidy
+ifeq ($(GO111MODULE),"on")
+  go mod tidy
+endif
 
 build: deps
 	mkdir -p $(BASEOUTPUT)weed

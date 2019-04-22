@@ -7,17 +7,17 @@ import (
 	"net/url"
 	"sync"
 
-	"google.golang.org/grpc"
-
-	"github.com/chrislusf/raft"
-	"github.com/gorilla/mux"
-	"github.com/spf13/viper"
 	"gitlab.momenta.works/kubetrain/seaweedfs/weed/glog"
 	"gitlab.momenta.works/kubetrain/seaweedfs/weed/pb/master_pb"
 	"gitlab.momenta.works/kubetrain/seaweedfs/weed/security"
 	"gitlab.momenta.works/kubetrain/seaweedfs/weed/sequence"
 	"gitlab.momenta.works/kubetrain/seaweedfs/weed/topology"
 	"gitlab.momenta.works/kubetrain/seaweedfs/weed/util"
+
+	"github.com/chrislusf/raft"
+	"github.com/gorilla/mux"
+	"github.com/spf13/viper"
+	"google.golang.org/grpc"
 )
 
 type MasterServer struct {
@@ -90,9 +90,8 @@ func NewMasterServer(r *mux.Router, port int, metaFolder string,
 		r.HandleFunc("/vol/status", ms.proxyToLeader(ms.guard.WhiteList(ms.volumeStatusHandler)))
 		r.HandleFunc("/vol/vacuum", ms.proxyToLeader(ms.guard.WhiteList(ms.volumeVacuumHandler)))
 		r.HandleFunc("/submit", ms.guard.WhiteList(ms.submitFromMasterServerHandler))
-		r.HandleFunc("/stats/health", ms.guard.WhiteList(statsHealthHandler))
-		r.HandleFunc("/stats/counter", ms.guard.WhiteList(statsCounterHandler))
-		r.HandleFunc("/stats/memory", ms.guard.WhiteList(statsMemoryHandler))
+		r.HandleFunc("/healthz", ms.guard.WhiteList(healthzHandler))
+		r.HandleFunc("/metrics", ms.guard.WhiteList(ms.metricsHandler))
 		r.HandleFunc("/{fileId}", ms.proxyToLeader(ms.redirectHandler))
 	}
 
