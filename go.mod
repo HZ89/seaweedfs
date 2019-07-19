@@ -26,6 +26,7 @@ require (
 	github.com/kurin/blazer v0.5.3
 	github.com/lib/pq v1.1.0
 	github.com/peterh/liner v1.1.0
+	github.com/prometheus/client_golang v0.9.3-0.20190127221311-3c4408c8b829
 	github.com/rakyll/statik v0.1.6
 	github.com/rwcarlsen/goexif v0.0.0-20190401172101-9e8deecbddbd
 	github.com/satori/uuid v1.2.0
