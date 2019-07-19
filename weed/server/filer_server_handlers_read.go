@@ -13,6 +13,7 @@ import (
 	"strings"
 	"sync"
 	"sync/atomic"
+	"time"
 
 	"gitlab.momenta.works/kubetrain/seaweedfs/weed/filer2"
 	"gitlab.momenta.works/kubetrain/seaweedfs/weed/glog"
@@ -37,11 +38,20 @@ func (fs *FilerServer) GetOrHeadHandler(w http.ResponseWriter, r *http.Request, 
 	}
 
 	if entry.IsDirectory() {
-		if fs.option.DisableDirListing {
-			w.WriteHeader(http.StatusMethodNotAllowed)
+		if r.Method == "GET" {
+			if fs.option.DisableDirListing {
+				w.WriteHeader(http.StatusMethodNotAllowed)
+				return
+			}
+			fs.listDirectoryHandler(w, r)
+		}
+		if r.Method == "HEAD" {
+			w.Header().Set("X-filer-isdir", strconv.FormatBool(entry.IsDirectory()))
+			w.Header().Set("X-filer-mode", entry.Mode.String())
+			w.Header().Set("X-filer-mtime", entry.Mtime.Format(time.ANSIC))
 			return
 		}
-		fs.listDirectoryHandler(w, r)
+
 		return
 	}
 
