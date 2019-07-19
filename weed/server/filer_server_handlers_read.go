@@ -46,9 +46,9 @@ func (fs *FilerServer) GetOrHeadHandler(w http.ResponseWriter, r *http.Request, 
 			fs.listDirectoryHandler(w, r)
 		}
 		if r.Method == "HEAD" {
-			w.Header().Set("X-filer-isdir", strconv.FormatBool(entry.IsDirectory()))
-			w.Header().Set("X-filer-mode", entry.Mode.String())
-			w.Header().Set("X-filer-mtime", entry.Mtime.Format(time.ANSIC))
+			w.Header().Set("x-filer-isdir", strconv.FormatBool(entry.IsDirectory()))
+			w.Header().Set("x-filer-mode", entry.Mode.String())
+			w.Header().Set("x-filer-mtime", entry.Mtime.Format(time.ANSIC))
 			return
 		}
 
@@ -65,6 +65,9 @@ func (fs *FilerServer) GetOrHeadHandler(w http.ResponseWriter, r *http.Request, 
 	if r.Method == "HEAD" {
 		w.Header().Set("Content-Length", strconv.FormatInt(int64(filer2.TotalSize(entry.Chunks)), 10))
 		w.Header().Set("Last-Modified", entry.Attr.Mtime.Format(http.TimeFormat))
+		w.Header().Set("x-filer-isdir", strconv.FormatBool(entry.IsDirectory()))
+		w.Header().Set("x-filer-mode", entry.Mode.String())
+		w.Header().Set("x-filer-mtime", entry.Mtime.Format(time.ANSIC))
 		setEtag(w, filer2.ETag(entry.Chunks))
 		return
 	}
